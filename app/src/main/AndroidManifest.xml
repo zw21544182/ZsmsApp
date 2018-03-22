@@ -29,6 +29,8 @@
         </activity>
         <activity android:name="ui.activity.RegisterActivity" />
         <activity android:name="ui.activity.HomeActivity"/>
+        <activity android:name="ui.activity.AddCusRecord" />
+        <activity android:name="ui.activity.AddMessage"/>5
     </application>
 
 </manifest>

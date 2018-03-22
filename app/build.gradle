@@ -24,12 +24,14 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //底部导航
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.4.1'
-
+    //图片加载
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
     //交互对话框库
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
+    //bmob云服务器
     implementation 'cn.bmob.android:bmob-sdk:3.5.5'
-    //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
     implementation 'cn.bmob.android:http-legacy:1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

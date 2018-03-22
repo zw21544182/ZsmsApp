@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.zhongwang.zsmsapp.R;
+
 import base.BaseFragment;
 
 /**
@@ -14,7 +16,9 @@ import base.BaseFragment;
 public class SettingFragment extends BaseFragment {
     @Override
     public View initView(LayoutInflater inflater) {
-        return null;
+        View view = inflater.inflate(R.layout.fragment_setting,null);
+        initFindViewById(view);
+        return view;
     }
 
     @Override

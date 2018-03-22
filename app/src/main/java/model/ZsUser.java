@@ -1,6 +1,7 @@
 package model;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by zhongwang on 2018/3/16.
@@ -12,7 +13,20 @@ public class ZsUser extends BmobObject {
     private String nickName;
     private String idNum;
     private int state=1;//    1表示未审批，2表示可用
-    private BmobObject imageHead;
+    private BmobFile imageHead;
+
+    public ZsUser(String userName, String passWord, String nickName, String idNum, int state, BmobFile imageHead) {
+        this.userName = userName;
+        this.passWord = passWord;
+        this.nickName = nickName;
+        this.idNum = idNum;
+        this.state = state;
+        this.imageHead = imageHead;
+    }
+
+    public ZsUser() {
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -53,11 +67,11 @@ public class ZsUser extends BmobObject {
         this.state = state;
     }
 
-    public BmobObject getImageHead() {
+    public BmobFile getImageHead() {
         return imageHead;
     }
 
-    public void setImageHead(BmobObject imageHead) {
+    public void setImageHead(BmobFile imageHead) {
         this.imageHead = imageHead;
     }
 }

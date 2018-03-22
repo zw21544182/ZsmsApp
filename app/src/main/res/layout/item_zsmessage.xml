@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/messageheight"
+    android:layout_marginTop="10sp"
+    android:layout_marginBottom="10sp"
+    android:layout_marginLeft="15sp"
+    android:layout_marginRight="15sp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_zsmessage">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:text="左尚名社第一条通知"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/ivMessage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/messageimage" />
+
+</LinearLayout>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="titlesize">18sp</dimen>
+    <dimen name="actionbarheight">50sp</dimen>
+    <dimen name="messageheight">70sp</dimen>
+    <dimen name="messageimage">45sp</dimen>
 </resources>
