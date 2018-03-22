@@ -4,14 +4,16 @@ package base;
  * Created by zhongwang on 2018/3/16.
  */
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import util.ToastUtil;
 
 /**
@@ -20,9 +22,10 @@ import util.ToastUtil;
  * 功能描述:基类Activity
  */
 
-public abstract class BaseActivity extends Activity implements View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     private int layoutId;
     private ToastUtil toastUtil;
+    protected SweetAlertDialog sweetAlertDialog;
 
     /**
      * 设置界面布局Layout
@@ -114,5 +117,14 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     }
     private void initBase() {
         toastUtil = ToastUtil.getInstance(this);
+    }
+    protected void showDialog() {
+        if (sweetAlertDialog == null)
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        sweetAlertDialog.setTitleText("加载中");
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog.show();
+
     }
 }

@@ -12,7 +12,7 @@ public class ZsUser extends BmobObject {
     private String nickName;
     private String idNum;
     private int state=1;//    1表示未审批，2表示可用
-
+    private BmobObject imageHead;
     public String getUserName() {
         return userName;
     }
@@ -51,5 +51,13 @@ public class ZsUser extends BmobObject {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public BmobObject getImageHead() {
+        return imageHead;
+    }
+
+    public void setImageHead(BmobObject imageHead) {
+        this.imageHead = imageHead;
     }
 }

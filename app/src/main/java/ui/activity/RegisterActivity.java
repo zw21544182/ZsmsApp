@@ -1,7 +1,6 @@
-package ui;
+package ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -132,6 +131,7 @@ public class RegisterActivity extends BaseActivity {
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismissWithAnimation();
                                     Intent data = new Intent();
                                     data.putExtra("username", userName);
                                     data.putExtra("password", passWord);
@@ -147,43 +147,35 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    private void showDialog() {
-        if (sweetAlertDialog == null)
-            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        sweetAlertDialog.setTitleText("加载中");
-        sweetAlertDialog.setCancelable(false);
-        sweetAlertDialog.show();
 
-    }
 
     private boolean isRegister() {
         boolean result = true;
-//        if (nickName.trim().equals("") || nickName.length() > 15 || nickName.length() < 3) {
-//            result = false;
-//            showToast("昵称输入不规范");
-//            return result;
-//        }
+        if (nickName.trim().equals("") || nickName.length() > 15 || nickName.length() < 3) {
+            result = false;
+            showToast("昵称输入不规范");
+            return result;
+        }
         if (userName.trim().equals("") || userName.length() < 8) {
             result = false;
             showToast("账号输入不规范");
             return result;
         }
-//        if (passWord.trim().equals("") || passWord.length() < 8) {
-//            result = false;
-//            showToast("密码输入不规范");
-//            return result;
-//        }
-//        if (!surePassWords.trim().equals(passWord.trim())) {
-//            result = false;
-//            showToast("两次密码输入不一致");
-//            return result;
-//        }
-//        if (!(idNum.length() == 18)) {
-//            result = false;
-//            showToast("身份证号码输入不规范");
-//            return result;
-//        }
+        if (passWord.trim().equals("") || passWord.length() < 8) {
+            result = false;
+            showToast("密码输入不规范");
+            return result;
+        }
+        if (!surePassWords.trim().equals(passWord.trim())) {
+            result = false;
+            showToast("两次密码输入不一致");
+            return result;
+        }
+        if (!(idNum.length() == 18)) {
+            result = false;
+            showToast("身份证号码输入不规范");
+            return result;
+        }
         return result;
     }
 }
