@@ -28,7 +28,7 @@ public class ShowFragment extends BaseFragment {
     private RecyclerView rvShow;
     private List<ZsMessage> zsMessages;
     private ZsMessageAdapter zsMessageAdapter;
-    private List<Integer> zsMessageLayout;
+
     @Override
     public View initView(LayoutInflater inflater) {
         View view = inflater.inflate(R.layout.fragment_show, null);
@@ -39,19 +39,20 @@ public class ShowFragment extends BaseFragment {
     @Override
     public void initFindViewById(View view) {
         rvShow = view.findViewById(R.id.rvShow);
-        rvShow.setLayoutManager(new LinearLayoutManager(getActivity()));
-        zsMessageLayout = new ArrayList<>();
+        // 创建一个线性布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //设置垂直滚动，也可以设置横向滚动
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvShow.setLayoutManager(layoutManager);
         zsMessages = new ArrayList<>();
-        zsMessageLayout.add(R.layout.item_zsmessage);
-        zsMessageAdapter = new ZsMessageAdapter(zsMessages,getActivity(),zsMessageLayout);
+        zsMessageAdapter = new ZsMessageAdapter(zsMessages, getActivity(), R.layout.item_zsmessage);
+        rvShow.setAdapter(zsMessageAdapter);
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         getMessageInfo();
-     }
-
-
+    }
 
 
     @Override
@@ -66,12 +67,13 @@ public class ShowFragment extends BaseFragment {
         query.findObjects(new FindListener<ZsMessage>() {
             @Override
             public void done(List<ZsMessage> object, BmobException e) {
-                if(e==null){
-                    Log.i("bmob","查询成功：共"+object.size()+"条数据。");
+                if (e == null) {
+                    Log.i("bmob", "查询成功：共" + object.size() + "条数据。");
                     zsMessageAdapter.addDatas(object);
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
-        });   }
+        });
+    }
 }

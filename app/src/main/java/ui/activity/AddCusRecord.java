@@ -13,6 +13,7 @@ import base.BaseActivity;
 public class AddCusRecord extends BaseActivity {
     @Override
     public int getLayoutId() {
+        setFullScreen();
         return R.layout.activity_addcusrecord;
     }
 

@@ -23,9 +23,7 @@ import java.util.List;
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter {
     protected ArrayList<T> data;
     protected Context context;
-    protected List<Integer> layoutIds;//布局集合
-    protected boolean isMore = true;//上拉刷新时，是否有更多数据
-    private boolean canLoad = true;
+    private int layoutId;
 
     /**
      * 适配器构造方法 #注意List
@@ -34,11 +32,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter {
      * @param context   上下文对象
      * @param layoutIds 布局集合
      */
-    public BaseRecyclerViewAdapter(List<T> data, Context context, List<Integer> layoutIds) {
+    public BaseRecyclerViewAdapter(List<T> data, Context context, int layoutIds) {
         this.data = new ArrayList<>();
-        this.layoutIds = new ArrayList<>();
         this.data.addAll(data);
-        this.layoutIds.addAll(layoutIds);
+        this.layoutId = layoutIds;
         this.context = context;
     }
 
@@ -72,23 +69,13 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (canLoad) {
-            if (position + 1 == getItemCount()) {
-                return -1;//最后行时设为-1显示footLayout
-            } else {
-                return position;//其他设为位置
-            }
-        } else {
-            return position;
-        }
-
+        return super.getItemViewType(position);
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int pos) {
         Log.d("zww", "onCreateViewHolder " + pos);
-        int layout = getLayoutIdByPos(pos);
-        View view = LayoutInflater.from(context).inflate(layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
         BaseViewHolder baseViewHolder = new BaseViewHolder(view);
         onCreate(baseViewHolder, data.get(pos), pos);
         return baseViewHolder;
@@ -96,23 +83,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-
-    }
-
-    /**
-     * 定制要显示的布局
-     *
-     * @param pos 位置
-     * @return 对应顺序下返回的布局
-     */
-    protected int getLayoutIdByPos(int pos) {
-        int res = 0;
-        if (pos < layoutIds.size()) {//layoutIds是存放布局的集合
-            res = layoutIds.get(pos);
-        } else {
-            res = layoutIds.get(pos % layoutIds.size());
-        }
-        return res;
+        onBind((BaseViewHolder) viewHolder, data.get(position), position);//设置显示数据
     }
 
 
@@ -134,34 +105,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        if (canLoad) return data == null ? 0 : data.size() + 1;//数据为0或为空时返回0，否则data.size()+1
-        else return data == null ? 0 : data.size();
+        return data.size();
     }
 
-    /**
-     * 是否有更多数据
-     *
-     * @param more 指定参数
-     */
-    public void setMore(boolean more) {
-        //暴露方法给Activity
-        this.isMore = more;
-    }
 
-    protected class FootViewHolder extends BaseViewHolder {
-        public FootViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    /**
-     * 设置是否可以加载更多，底部布局
-     *
-     * @param canLoad 指定参数
-     */
-    public void setCanLoad(boolean canLoad) {
-        this.canLoad = canLoad;
-    }
 
     public class BaseViewHolder extends RecyclerView.ViewHolder {
         //该类下部分方法可以自行添加

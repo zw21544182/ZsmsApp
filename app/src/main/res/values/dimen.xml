@@ -2,6 +2,6 @@
 <resources>
     <dimen name="titlesize">18sp</dimen>
     <dimen name="actionbarheight">50sp</dimen>
-    <dimen name="messageheight">70sp</dimen>
-    <dimen name="messageimage">45sp</dimen>
+    <dimen name="messageheight">130sp</dimen>
+    <dimen name="messageimage">100sp</dimen>
 </resources>

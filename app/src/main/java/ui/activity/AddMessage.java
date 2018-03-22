@@ -13,6 +13,7 @@ import base.BaseActivity;
 public class AddMessage extends BaseActivity {
     @Override
     public int getLayoutId() {
+        setFullScreen();
         return R.layout.activity_addmessage;
     }
 
