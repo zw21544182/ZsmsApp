@@ -6,4 +6,5 @@ package util;
 
 public class CommonUtil {
     public static final String BASEOBJECTID  = "BASEOBJECTID";
+    public static final String LOGTAG = "ZSAPP";
 }

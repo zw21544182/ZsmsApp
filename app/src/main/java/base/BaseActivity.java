@@ -9,11 +9,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import util.CommonUtil;
 import util.ToastUtil;
 
 /**
@@ -117,6 +119,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
     private void initBase() {
         toastUtil = ToastUtil.getInstance(this);
+    }
+    protected void log(String content){
+        Log.i(CommonUtil.LOGTAG,content);
     }
     protected void showDialog() {
         if (sweetAlertDialog == null)

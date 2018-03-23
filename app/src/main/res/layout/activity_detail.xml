@@ -20,7 +20,7 @@
         <TextView
             android:id="@+id/tvGoBack"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20sp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15sp"
@@ -28,7 +28,17 @@
             android:drawablePadding="5sp"
             android:text="返回"
             android:textColor="#fff" />
-
+        <TextView
+            android:id="@+id/tvShare"
+            android:layout_width="wrap_content"
+            android:layout_height="20sp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15sp"
+            android:drawableRight="@mipmap/share"
+            android:drawablePadding="5sp"
+            android:text="分享"
+            android:textColor="#fff" />
     </RelativeLayout>
 
     <WebView
