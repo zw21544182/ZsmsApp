@@ -1,11 +1,16 @@
 package ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -25,12 +30,17 @@ import java.util.regex.Pattern;
 
 import base.BaseActivity;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadFileListener;
+import model.ZsMessage;
 
 /**
  * Created by zhongwang on 2018/3/22.
  */
 
-public class AddMessage extends BaseActivity {
+public class AddMessageActivity extends BaseActivity {
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 12;
     private TextView tvGoBack;
     private EditText edTile;
     private EditText edMessageUrl;
@@ -73,10 +83,10 @@ public class AddMessage extends BaseActivity {
             rootLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (pattern.matcher(messageUrl).matches()) {
-                        Intent intent = new Intent(AddMessage.this, DetailActivity.class);
+                    if (pattern.matcher(messageUrl).matches() || messageUrl.trim().equals("")) {
+                        Intent intent = new Intent(AddMessageActivity.this, DetailActivity.class);
                         intent.putExtra("messageUrl", messageUrl);
-                        AddMessage.this.startActivity(intent);
+                        AddMessageActivity.this.startActivity(intent);
                     } else {
                         showToast("消息链接输入不符合规范");
                     }
@@ -89,8 +99,9 @@ public class AddMessage extends BaseActivity {
 
         }
     };
-    private String cacheImagePath = getFilesDir().getAbsolutePath() + "cacheimage.jpg";
+    private String cacheImagePath = "";
     private BmobFile imageFile;
+    private Bitmap photo;
 
     @Override
     public int getLayoutId() {
@@ -104,6 +115,7 @@ public class AddMessage extends BaseActivity {
         edMessageUrl.addTextChangedListener(messageUrlWatcher);
         ivAddImage.setOnClickListener(this);
         btSave.setOnClickListener(this);
+        tvGoBack.setOnClickListener(this);
     }
 
     @Override
@@ -121,11 +133,15 @@ public class AddMessage extends BaseActivity {
         ivMessage = findViewById(R.id.ivMessage);
         tvMessageTitle = findViewById(R.id.tvMessageTitle);
         btSave = findViewById(R.id.btSave);
+        tvGoBack = findViewById(R.id.tvGoBack);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tvGoBack:
+                finish();
+                break;
             case R.id.ivAddImage:
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -133,17 +149,52 @@ public class AddMessage extends BaseActivity {
                 startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);
                 break;
             case R.id.btSave:
-                if (edTile.getEditableText().toString().trim().equals("")) {
-                    showToast("标题输入不符合规范");
-                    return;
-                }
-                if (edMessageUrl.getEditableText().toString().trim().equals("") || (!pattern.matcher(messageUrl).matches())) {
-                    showToast("网页链接输入不符合规范");
-                    return;
-                }
-
+                showDialog("数据上传中");
+                saveInfo();
                 break;
         }
+    }
+
+    private void saveInfo() {
+        String title = edTile.getEditableText().toString().trim();
+        if (title.equals("")) {
+            showToast("标题输入不符合规范");
+            dismissDialog();
+            return;
+        }
+        if (messageUrl.equals("") || (!pattern.matcher(messageUrl).matches())) {
+            showToast("网页链接输入不符合规范");
+            dismissDialog();
+
+            return;
+        }
+        final ZsMessage zsMessage = new ZsMessage();
+        zsMessage.setMessageUrl(messageUrl);
+        zsMessage.setTitle(title);
+        imageFile.upload(new UploadFileListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    zsMessage.setImageFile(imageFile);
+                    zsMessage.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            dismissDialog();
+                            if (e == null) {
+                                showToast("保存成功");
+                                return;
+                            }
+                            showToast("保存失败，原因: " + e.getMessage());
+
+                        }
+                    });
+                } else {
+                    dismissDialog();
+                    showToast("头像上传失败");
+                }
+                ;
+            }
+        });
     }
 
     public void resizeImage(Uri uri) {//重塑图片大小
@@ -161,11 +212,22 @@ public class AddMessage extends BaseActivity {
     private void showResizeImage(Intent data) {//显示图片
         Bundle extras = data.getExtras();
         if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
+            photo = extras.getParcelable("data");
             Drawable drawable = new BitmapDrawable(photo);
             ivAddImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ivAddImage.setImageDrawable(drawable);
             ivMessage.setImageDrawable(drawable);
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                    return;
+                }
+            }
+            cacheImagePath = getFilesDir().getAbsolutePath() + "cacheimage.jpg";
             imageFile = new BmobFile(saveBitmapFile(photo, cacheImagePath));
         }
     }
@@ -181,6 +243,24 @@ public class AddMessage extends BaseActivity {
             e.printStackTrace();
         }
         return file;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    cacheImagePath = getFilesDir().getAbsolutePath() + "cacheimage.jpg";
+                    imageFile = new BmobFile(saveBitmapFile(photo, cacheImagePath));
+                } else {
+                    imageFile = null;
+                }
+                return;
+            }
+        }
     }
 
     @Override

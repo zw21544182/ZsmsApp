@@ -98,8 +98,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     /**
      * @param cls
      */
-    public void enterActivity(Class cls){
-        Intent intent = new Intent(this,cls);
+    public void enterActivity(Class cls) {
+        Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
 
@@ -107,27 +107,45 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     /**
      * @param cls
      */
-    public void enterActivityAndKill(Class cls){
-        Intent intent = new Intent(this,cls);
+    public void enterActivityAndKill(Class cls) {
+        Intent intent = new Intent(this, cls);
         startActivity(intent);
         finish();
     }
     public void enterActivityForResult(Class cls,int requestCode){
         Intent intent = new Intent(this,cls);
         startActivityForResult(intent,requestCode);
-        finish();
     }
+
     private void initBase() {
         toastUtil = ToastUtil.getInstance(this);
     }
-    protected void log(String content){
-        Log.i(CommonUtil.LOGTAG,content);
+
+    protected void log(String content) {
+        Log.i(CommonUtil.LOGTAG, content);
     }
+
     protected void showDialog() {
         if (sweetAlertDialog == null)
             sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         sweetAlertDialog.setTitleText("加载中");
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog.show();
+
+    }
+
+    protected void dismissDialog() {
+        if (sweetAlertDialog.isShowing()) {
+            sweetAlertDialog.dismiss();
+        }
+    }
+
+    protected void showDialog(String content) {
+        if (sweetAlertDialog == null)
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        sweetAlertDialog.setTitleText(content);
         sweetAlertDialog.setCancelable(false);
         sweetAlertDialog.show();
 

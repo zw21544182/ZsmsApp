@@ -98,16 +98,22 @@ public class LoginActivity extends BaseActivity {
         query.addWhereEqualTo("passWord", passWord);
 //执行查询方法
         query.findObjects(new FindListener<ZsUser>() {
-
             @Override
             public void done(List<ZsUser> list, BmobException e) {
                 sweetAlertDialog.dismiss();
-                if (e == null && list.size() == 1) {
+                  if (e == null && list.size() == 1) {
                     int userState = list.get(0).getState();
                     if (userState == 1) {
                         new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("登陆失败")
                                 .setContentText("管理员暂未审核通过")
+                                .show();
+                        return;
+                    }
+                    if(e==null&&list==null){
+                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("登陆失败")
+                                .setContentText("您输入的账号或密码不符合规范,请注册")
                                 .show();
                         return;
                     }

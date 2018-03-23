@@ -10,7 +10,7 @@ import base.BaseActivity;
  * Created by zhongwang on 2018/3/22.
  */
 
-public class AddCusRecord extends BaseActivity {
+public class AddCusRecordActivity extends BaseActivity {
     @Override
     public int getLayoutId() {
         setFullScreen();

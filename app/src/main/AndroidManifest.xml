@@ -32,8 +32,8 @@
         </activity>
         <activity android:name="ui.activity.RegisterActivity" />
         <activity android:name="ui.activity.HomeActivity" />
-        <activity android:name="ui.activity.AddCusRecord" />
-        <activity android:name="ui.activity.AddMessage" />
+        <activity android:name="ui.activity.AddCusRecordActivity" />
+        <activity android:name="ui.activity.AddMessageActivity" />
         <activity android:name="ui.activity.DetailActivity" />
     </application>
 

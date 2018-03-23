@@ -4,15 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="@string/login_title"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/titlesize" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbarheight"
+        android:background="@color/colorTopic">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="登陆账号"
+            android:textColor="@android:color/white" />
+
+
+
+    </RelativeLayout>
+
 
     <EditText
         android:id="@+id/edUserName"

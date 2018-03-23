@@ -18,6 +18,9 @@ public class ZsMessage extends BmobObject {
         this.title = title;
     }
 
+    public ZsMessage() {
+       }
+
     public BmobFile getImageFile() {
         return imageFile;
     }

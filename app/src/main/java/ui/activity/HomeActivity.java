@@ -121,9 +121,9 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
         switch (view.getId()) {
             case R.id.tvAddRecord:
                 if (isShow) {
-                    enterActivity(AddMessage.class);
+                    enterActivity(AddMessageActivity.class);
                 } else {
-                    enterActivity(AddCusRecord.class);
+                    enterActivity(AddCusRecordActivity.class);
                 }
                 break;
         }
