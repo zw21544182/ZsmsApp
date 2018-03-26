@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +35,8 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import model.ZsMessage;
+import util.CommonUtil;
+import util.SharedPreferencesUtil;
 
 /**
  * Created by zhongwang on 2018/3/22.
@@ -42,6 +45,7 @@ import model.ZsMessage;
 public class AddMessageActivity extends BaseActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 12;
     private TextView tvGoBack;
+    private EditText edIntruction;
     private EditText edTile;
     private EditText edMessageUrl;
     private ImageView ivAddImage;
@@ -102,6 +106,7 @@ public class AddMessageActivity extends BaseActivity {
     private String cacheImagePath = "";
     private BmobFile imageFile;
     private Bitmap photo;
+    private boolean isSave = false;
 
     @Override
     public int getLayoutId() {
@@ -134,12 +139,17 @@ public class AddMessageActivity extends BaseActivity {
         tvMessageTitle = findViewById(R.id.tvMessageTitle);
         btSave = findViewById(R.id.btSave);
         tvGoBack = findViewById(R.id.tvGoBack);
+        edIntruction = findViewById(R.id.edIntruction);
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvGoBack:
+                Intent data = new Intent();
+                data.putExtra(CommonUtil.ISSAVEMESSAGE, isSave);
+                setResult(CommonUtil.MESSAGECALLBACK, data);
                 finish();
                 break;
             case R.id.ivAddImage:
@@ -155,26 +165,46 @@ public class AddMessageActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 保存信息
+     */
     private void saveInfo() {
         String title = edTile.getEditableText().toString().trim();
-        if (title.equals("")) {
+        String instruction = edIntruction.getEditableText().toString().trim();
+        String userObjectId = (String) SharedPreferencesUtil.getParam(this, CommonUtil.BASEOBJECTID, "");
+        if (title.equals("") || title.length() < 6) {
             showToast("标题输入不符合规范");
+            edTile.setText("");
+            dismissDialog();
+            return;
+        }
+        if (instruction.equals("") || instruction.length() < 10) {
+            showToast("简介输入不符合规范");
+            edIntruction.setText("");
             dismissDialog();
             return;
         }
         if (messageUrl.equals("") || (!pattern.matcher(messageUrl).matches())) {
             showToast("网页链接输入不符合规范");
+            edMessageUrl.setText("");
             dismissDialog();
-
+            return;
+        }
+        if (userObjectId.trim().equals("")) {
+            showToast("登陆状态异常");
+            enterActivityAndKill(LoginActivity.class);
             return;
         }
         final ZsMessage zsMessage = new ZsMessage();
         zsMessage.setMessageUrl(messageUrl);
         zsMessage.setTitle(title);
+        zsMessage.setInstruction(instruction);
+        zsMessage.setUserObjectId(userObjectId);
         imageFile.upload(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
+                    new File(cacheImagePath).delete();
                     zsMessage.setImageFile(imageFile);
                     zsMessage.save(new SaveListener<String>() {
                         @Override
@@ -182,6 +212,7 @@ public class AddMessageActivity extends BaseActivity {
                             dismissDialog();
                             if (e == null) {
                                 showToast("保存成功");
+                                isSave = true;
                                 return;
                             }
                             showToast("保存失败，原因: " + e.getMessage());
@@ -190,11 +221,25 @@ public class AddMessageActivity extends BaseActivity {
                     });
                 } else {
                     dismissDialog();
-                    showToast("头像上传失败");
+                    showToast("预览图上传失败");
                 }
-                ;
+
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (!isSave)
+            return super.onKeyDown(keyCode, event);
+        else {
+            Intent data = new Intent();
+            data.putExtra(CommonUtil.ISSAVEMESSAGE, isSave);
+            setResult(CommonUtil.MESSAGECALLBACK, data);
+            finish();
+            return true;
+
+        }
     }
 
     public void resizeImage(Uri uri) {//重塑图片大小

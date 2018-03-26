@@ -29,8 +29,8 @@ import util.SharedPreferencesUtil;
  */
 
 public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
-    private static final int MESSAGECODE = 11;
-    private static final int CUSTECORDCODE = 22;
+    public static final int MESSAGECODE = 11;
+    public static final int CUSTECORDCODE = 22;
     private FrameLayout content;
     private BottomNavigationBar bottombar;
     private TextView tvTitle, tvAddRecord;
@@ -121,9 +121,9 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
         switch (view.getId()) {
             case R.id.tvAddRecord:
                 if (isShow) {
-                    enterActivity(AddMessageActivity.class);
+                    enterActivityForResult(AddMessageActivity.class, MESSAGECODE);
                 } else {
-                    enterActivity(AddCusRecordActivity.class);
+                    enterActivityForResult(AddCusRecordActivity.class, CUSTECORDCODE);
                 }
                 break;
         }
@@ -132,30 +132,31 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        showFragment.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onTabSelected(int position) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if(zsmsApplication.isManageer())
+        if (zsmsApplication.isManageer())
             tvAddRecord.setVisibility(View.VISIBLE);
         switch (position) {
             case 0:
-                isShow=true;
+                isShow = true;
                 tvTitle.setText("首页");
                 if (showFragment == null)
                     showFragment = new ShowFragment();
                 transaction.replace(R.id.content, showFragment);
                 break;
             case 1:
-                isShow=false;
+                isShow = false;
                 tvTitle.setText("搜索");
                 if (searchFragment == null)
                     searchFragment = new SearchFragment();
                 transaction.replace(R.id.content, searchFragment);
                 break;
             case 2:
-                if(tvAddRecord.getVisibility()==View.VISIBLE)
+                if (tvAddRecord.getVisibility() == View.VISIBLE)
                     tvAddRecord.setVisibility(View.GONE);
                 tvTitle.setText("设置");
                 if (settingFragment == null)

@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="您的标题" />
+        android:text="消息标题" />
 
     <EditText
         android:id="@+id/edTile"
@@ -43,6 +43,31 @@
         android:background="@android:color/transparent"
         android:maxLines="1"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:hint="标题不能为空，且大于6个字符"
+        android:textColorHint="#CD919E"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8sp"
+        android:layout_marginTop="2sp"
+        android:background="#CD919E" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="消息简介" />
+
+    <EditText
+        android:id="@+id/edIntruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:maxLines="1"
+        android:paddingLeft="5dp"
+        android:hint="简介不能为空，且大于10个字符"
+
         android:paddingRight="5dp"
         android:textColorHint="#CD919E"
         android:textSize="15sp" />
@@ -53,11 +78,10 @@
         android:layout_marginBottom="8sp"
         android:layout_marginTop="2sp"
         android:background="#CD919E" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="您的消息链接" />
+        android:text="消息链接" />
 
     <EditText
         android:id="@+id/edMessageUrl"
@@ -66,6 +90,8 @@
         android:background="@android:color/transparent"
         android:maxLines="1"
         android:paddingLeft="5dp"
+        android:hint="输入内容必须为网址"
+
         android:paddingRight="5dp"
         android:textColorHint="#CD919E"
         android:textSize="15sp" />

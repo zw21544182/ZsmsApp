@@ -83,7 +83,6 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.btLogin:
                 showDialog();
-                // TODO: 2018/3/16 连接bmob服务器进行登陆操作
                 login();
                 break;
         }
@@ -100,8 +99,9 @@ public class LoginActivity extends BaseActivity {
         query.findObjects(new FindListener<ZsUser>() {
             @Override
             public void done(List<ZsUser> list, BmobException e) {
+                String errorMessage = "";
                 sweetAlertDialog.dismiss();
-                  if (e == null && list.size() == 1) {
+                if (e == null && list.size() == 1) {
                     int userState = list.get(0).getState();
                     if (userState == 1) {
                         new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity {
                                 .show();
                         return;
                     }
-                    if(e==null&&list==null){
+                    if (e == null && list == null) {
                         new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("登陆失败")
                                 .setContentText("您输入的账号或密码不符合规范,请注册")
@@ -121,9 +121,14 @@ public class LoginActivity extends BaseActivity {
                     enterActivityAndKill(HomeActivity.class);
                     return;
                 }
+                if (e == null && list.size() == 0) {
+                    errorMessage = "账号密码不匹配";
+                } else {
+                    errorMessage = e.getMessage();
+                }
                 new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("登陆失败")
-                        .setContentText("失败原因: " + e.getMessage())
+                        .setContentText("失败原因: " + errorMessage)
                         .show();
             }
         });

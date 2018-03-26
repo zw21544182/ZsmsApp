@@ -58,8 +58,8 @@ public class ZsMessageAdapter extends RecyclerView.Adapter<ZsMessageAdapter.Base
             public void onClick(View view) {
                 ZsMessage zsMessage = data.get(position);
                 String messageUrl = zsMessage.getMessageUrl();
-                Intent intent = new Intent(context,DetailActivity.class);
-                intent.putExtra("messageUrl",messageUrl);
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("messageUrl", messageUrl);
                 context.startActivity(intent);
             }
         });
@@ -72,6 +72,12 @@ public class ZsMessageAdapter extends RecyclerView.Adapter<ZsMessageAdapter.Base
 
     public void addDatas(List<ZsMessage> object) {
 
+        data.addAll(object);
+        notifyDataSetChanged();
+    }
+
+    public void setDatas(List<ZsMessage> object) {
+        data.clear();
         data.addAll(object);
         notifyDataSetChanged();
     }
