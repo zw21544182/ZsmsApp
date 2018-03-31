@@ -1,9 +1,10 @@
 package base;
 
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import util.ToastUtil;
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     public View view;
     private ToastUtil toastUtil;
+    protected BaseActivity baseActivity;
 
     public void showToast(String content) {
         toastUtil.showToast(content);
@@ -31,7 +33,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     }
+    }
 
     @Nullable
     @Override
@@ -53,14 +55,20 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        toastUtil = ToastUtil.getInstance(getActivity());
+        baseActivity = (BaseActivity) getActivity();
+        toastUtil = ToastUtil.getInstance(baseActivity);
         initData(savedInstanceState);
         initEvent();
 
     }
 
+    protected void showDialog(String content) {
+        baseActivity.showDialog(content);
+    }
 
-
+    protected void dismissDialog() {
+        baseActivity.dismissDialog();
+    }
 
     /*
         子类实现此方法返回View展示
@@ -75,9 +83,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     public abstract void click(View view);
 
-
-
-
+    /**
+     * @param cls
+     */
+    public void enterActivityAndKill(Class cls) {
+        Intent intent = new Intent(getActivity(), cls);
+        getActivity().startActivity(intent);
+        getActivity().finish();
+    }
 
 
 }

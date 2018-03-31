@@ -21,9 +21,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //圆形头像框
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     //底部导航
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.4.1'
     //图片加载

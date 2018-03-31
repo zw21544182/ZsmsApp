@@ -1,8 +1,11 @@
 package ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -24,19 +27,27 @@ import ui.fragment.ShowFragment;
 import util.CommonUtil;
 import util.SharedPreferencesUtil;
 
+import static util.CommonUtil.CUSTECORDCODE;
+import static util.CommonUtil.HEADCODE;
+import static util.CommonUtil.MESSAGECODE;
+
+
 /**
  * Created by zhongwang on 2018/3/17.
  */
 
 public class HomeActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
-    public static final int MESSAGECODE = 11;
-    public static final int CUSTECORDCODE = 22;
+
     private FrameLayout content;
     private BottomNavigationBar bottombar;
     private TextView tvTitle, tvAddRecord;
     private ZsmsApplication zsmsApplication;
     private boolean isShow = true;
     private BaseFragment showFragment, searchFragment, settingFragment;
+    private BaseFragment mCurrentFrgment;
+    private android.app.FragmentTransaction mfragmentTransaction;
+    private boolean isExit;
+    private Handler handler;
 
     @Override
     public int getLayoutId() {
@@ -51,6 +62,13 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void initData() {
         zsmsApplication = (ZsmsApplication) getApplication();
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                isExit=false;
+            }
+        };
         showDialog();
         setAuthority();
         initTab();
@@ -110,10 +128,9 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     }
 
     private void initTab() {
-        showFragment = new ShowFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, showFragment);
-        transaction.commit();
+        if (showFragment == null)
+            showFragment = new ShowFragment();
+        switchFragment(showFragment);
     }
 
     @Override
@@ -132,12 +149,14 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        showFragment.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MESSAGECODE)
+            showFragment.onActivityResult(requestCode, resultCode, data);
+        else if (requestCode == HEADCODE)
+            settingFragment.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onTabSelected(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (zsmsApplication.isManageer())
             tvAddRecord.setVisibility(View.VISIBLE);
         switch (position) {
@@ -146,14 +165,14 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 tvTitle.setText("首页");
                 if (showFragment == null)
                     showFragment = new ShowFragment();
-                transaction.replace(R.id.content, showFragment);
+                switchFragment(showFragment);
                 break;
             case 1:
                 isShow = false;
                 tvTitle.setText("搜索");
                 if (searchFragment == null)
                     searchFragment = new SearchFragment();
-                transaction.replace(R.id.content, searchFragment);
+                switchFragment(searchFragment);
                 break;
             case 2:
                 if (tvAddRecord.getVisibility() == View.VISIBLE)
@@ -161,11 +180,44 @@ public class HomeActivity extends BaseActivity implements BottomNavigationBar.On
                 tvTitle.setText("设置");
                 if (settingFragment == null)
                     settingFragment = new SettingFragment();
-                transaction.replace(R.id.content, settingFragment);
-
+                switchFragment(settingFragment);
                 break;
         }
-        transaction.commit();
+    }
+
+    private void switchFragment(Fragment fragment) {
+        mfragmentTransaction = getFragmentManager().beginTransaction();
+        if (null != mCurrentFrgment) {
+            mfragmentTransaction.hide(mCurrentFrgment);
+        }
+        if (!fragment.isAdded()) {
+            mfragmentTransaction.add(R.id.content, fragment, fragment.getClass().getName());
+        } else {
+            mfragmentTransaction.show(fragment);
+        }
+        mfragmentTransaction.commit();
+        mCurrentFrgment = (BaseFragment) fragment;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            exit();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            showToast("再按一次退出程序");
+            // 利用handler延迟发送更改状态信息
+            handler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+
+            finish();
+
+        }
     }
 
     @Override

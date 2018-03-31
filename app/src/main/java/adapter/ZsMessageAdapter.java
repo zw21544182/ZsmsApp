@@ -2,6 +2,7 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,8 @@ public class ZsMessageAdapter extends RecyclerView.Adapter<ZsMessageAdapter.Base
     protected List<ZsMessage> data;
     protected Context context;
     private int layoutId;
-    private ImageView imageView;
-    private TextView textView;
+    private ImageView ivMessage;
+    private TextView tvMessageTitle;
     private LinearLayout rootLayout;
 
     public ZsMessageAdapter(List<ZsMessage> data, Context context, int layoutId) {
@@ -42,8 +43,8 @@ public class ZsMessageAdapter extends RecyclerView.Adapter<ZsMessageAdapter.Base
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        imageView = view.findViewById(R.id.ivMessage);
-        textView = view.findViewById(R.id.tvMessageTitle);
+        ivMessage = view.findViewById(R.id.ivMessage);
+        tvMessageTitle = view.findViewById(R.id.tvMessageTitle);
         rootLayout = view.findViewById(R.id.rootLayout);
         return new BaseViewHolder(view);
 
@@ -51,8 +52,9 @@ public class ZsMessageAdapter extends RecyclerView.Adapter<ZsMessageAdapter.Base
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, final int position) {
-        Glide.with(context).load(data.get(position).getImageFile().getUrl()).into(imageView);
-        textView.setText(data.get(position).getTitle());
+        Glide.with(context).load(data.get(position).getImageFile().getUrl()).into(ivMessage);
+        tvMessageTitle.setText(data.get(position).getTitle());
+        tvMessageTitle .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

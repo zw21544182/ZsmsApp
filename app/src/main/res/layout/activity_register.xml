@@ -91,26 +91,9 @@
         android:paddingRight="5dp"
         android:textColorHint="#CD919E"
         android:textSize="15sp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="8sp"
-        android:layout_marginTop="8sp"
-        android:background="#CD919E" />
 
-    <EditText
-        android:id="@+id/edIdNum"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:maxLines="1"
 
-        android:hint="@string/inputidnum"
-        android:paddingLeft="5dp"
-        android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        android:paddingRight="5dp"
-        android:textColorHint="#CD919E"
-        android:textSize="15sp" />
+
 
     <RelativeLayout
         android:id="@+id/btRegister"

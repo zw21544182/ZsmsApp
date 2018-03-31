@@ -1,10 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout android:orientation="vertical"
     android:background="@android:color/white"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:text="设置"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</android.support.constraint.ConstraintLayout>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        style="@style/LayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/headlayoutheight">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/headheight"
+            android:layout_height="@dimen/headheight"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/head_man"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="1dp" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#000" />
+
+    <LinearLayout
+        android:id="@+id/about"
+
+        style="@style/LayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemwidth"
+        android:padding="@dimen/itempadding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="关于我们" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#458B74" />
+
+    <LinearLayout
+        android:id="@+id/loginout"
+        style="@style/LayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemwidth"
+        android:padding="@dimen/itempadding">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出账号" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#458B74" />
+</LinearLayout>

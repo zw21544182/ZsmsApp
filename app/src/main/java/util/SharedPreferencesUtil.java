@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesUtil {
     private static final String FILE_NAME = "share_date";
+
+
     public static void setParam(Context context, String key, Object object) {
         String type = object.getClass().getSimpleName();
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
@@ -30,6 +32,10 @@ public class SharedPreferencesUtil {
     }
 
 
+    public static void removeParam(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        sp.edit().remove(key).commit();
+    }
 
     public static Object getParam(Context context, String key, Object defaultObject) {
         String type = defaultObject.getClass().getSimpleName();

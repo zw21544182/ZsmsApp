@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headlayoutheight">100dp</dimen>
+    <dimen name="titlesize">18sp</dimen>
+    <dimen name="actionbarheight">50dp</dimen>
+    <dimen name="messageheight">130sp</dimen>
+    <dimen name="messageimage">100sp</dimen>
+    <dimen name="itemwidth">40sp</dimen>
+    <dimen name="itempadding">10sp</dimen>
+    <dimen name="headheight">50dp</dimen>
+</resources>

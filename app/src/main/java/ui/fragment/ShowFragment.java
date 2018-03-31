@@ -25,7 +25,8 @@ import cn.bmob.v3.listener.FindListener;
 import model.ZsMessage;
 import util.CommonUtil;
 
-import static ui.activity.HomeActivity.MESSAGECODE;
+import static util.CommonUtil.MESSAGECODE;
+
 
 /**
  * Created by zhongwang on 2018/3/17.

@@ -195,6 +195,10 @@ public class AddMessageActivity extends BaseActivity {
             enterActivityAndKill(LoginActivity.class);
             return;
         }
+        if(imageFile==null){
+            showToast("请先选择图片");
+            return;
+        }
         final ZsMessage zsMessage = new ZsMessage();
         zsMessage.setMessageUrl(messageUrl);
         zsMessage.setTitle(title);
@@ -230,16 +234,12 @@ public class AddMessageActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (!isSave)
-            return super.onKeyDown(keyCode, event);
-        else {
             Intent data = new Intent();
             data.putExtra(CommonUtil.ISSAVEMESSAGE, isSave);
             setResult(CommonUtil.MESSAGECALLBACK, data);
             finish();
             return true;
 
-        }
     }
 
     public void resizeImage(Uri uri) {//重塑图片大小

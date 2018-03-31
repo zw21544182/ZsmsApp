@@ -26,14 +26,12 @@ public class RegisterActivity extends BaseActivity {
     private EditText edUserName;
     private EditText edPassWord;
     private EditText edSurePassWord;
-    private EditText edIdNum;
     private RelativeLayout btRegister;
     private String nickName;
     private String userName;
     private String passWord;
     private String surePassWords;
-    private String idNum;
-    private SweetAlertDialog sweetAlertDialog;
+     private SweetAlertDialog sweetAlertDialog;
 
     @Override
     public int getLayoutId() {
@@ -56,7 +54,6 @@ public class RegisterActivity extends BaseActivity {
         edUserName = findViewById(R.id.edUserName);
         edPassWord = findViewById(R.id.edPassWord);
         edSurePassWord = findViewById(R.id.edSurePassWord);
-        edIdNum = findViewById(R.id.edIdNum);
         btRegister = findViewById(R.id.btRegister);
 
 
@@ -70,8 +67,7 @@ public class RegisterActivity extends BaseActivity {
                 userName = edUserName.getEditableText().toString().trim();
                 passWord = edPassWord.getEditableText().toString().trim();
                 surePassWords = edSurePassWord.getEditableText().toString().trim();
-                idNum = edIdNum.getEditableText().toString().trim();
-                boolean result = isRegister();
+                 boolean result = isRegister();
                 if (result) {
                     // TODO: 2018/3/16 ZsmsUser添加一条数据，state默认位1
                     showDialog();
@@ -148,7 +144,6 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-
     private boolean isRegister() {
         boolean result = true;
         if (nickName.trim().equals("") || nickName.length() > 15 || nickName.length() < 3) {
@@ -171,11 +166,7 @@ public class RegisterActivity extends BaseActivity {
             showToast("两次密码输入不一致");
             return result;
         }
-        if (!(idNum.length() == 18)) {
-            result = false;
-            showToast("身份证号码输入不规范");
-            return result;
-        }
+
         return result;
     }
 }
